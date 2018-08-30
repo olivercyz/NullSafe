@@ -115,11 +115,27 @@ static void cacheSignatures()
                     //find implementation
                     for (Class someClass in classList)
                     {
-                        if ([someClass instancesRespondToSelector:selector])
-                        {
-                            signature = [someClass instanceMethodSignatureForSelector:selector];
-                            break;
+                        if (@available(iOS 12.0, *)) {
+                            @try {
+                                if ([someClass instancesRespondToSelector:selector])
+                                {
+                                    signature = [someClass instanceMethodSignatureForSelector:selector];
+                                    break;
+                                }
+                            } @catch (NSException *exception) {
+                                
+                            } @finally {
+                                
+                            }
+                        } else {
+                            if ([someClass instancesRespondToSelector:selector])
+                            {
+                                
+                                signature = [someClass instanceMethodSignatureForSelector:selector];
+                                break;
+                            }
                         }
+                        
                     }
 
                     //cache for next time
